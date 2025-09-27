@@ -1,0 +1,1 @@
+#Aquí estará todo el código para el funcionamiento intermediario entre el servidor y el backend
