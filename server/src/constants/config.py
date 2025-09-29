@@ -1,7 +1,7 @@
 db_config = {
     "host": "localhost",
-    "port": "5500",
+    "port": "3306",
     "user": "root",
-    "password": "password",
+    "password": "Manuel_055",
     "database": "crud_microservicios"
 }

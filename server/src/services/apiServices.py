@@ -20,9 +20,16 @@ class usuariosApiService() :
         cursor.close()
         conx.close()
         if usuario:
-            return {"message": "Autenticación exitosa", "usuario": usuario}
+            return {
+                "success": True,
+                "message": "Autenticación exitosa",
+                "usuario": usuario
+            }
         else:
-            return {"message": "Correo o contraseña incorrectos", "usuario": None}
+            return {
+                "success": False,
+                "message": "Correo o contraseña incorrectos"
+            }
 
     def registrarUsuario(self, nombreParam, correoParam, contrasenaParam):
         conx = self.crearConexion()

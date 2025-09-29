@@ -19,7 +19,20 @@ def login():
     correo = data.get("correo")
     contrasena = data.get("contrasena")
     
-    return jsonify(usuarioAPI.autenticarUsuario(correo, contrasena))
+    usuario = usuarioAPI.autenticarUsuario(correo, contrasena)
+
+    if usuario:
+        return jsonify({
+            "success": True,
+            "message": "Login exitoso",
+            "usuario": usuario,
+            # Aquí luego puedes generar un JWT y retornarlo
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Correo o contraseña inválidos"
+        }), 401
 
 @app.route("/api/registrarUsuario", methods=["POST"])
 def let_user():
