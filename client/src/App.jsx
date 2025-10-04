@@ -1,65 +1,90 @@
+// React
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useSearchParams } from "react-router-dom";
+import './App.css'
+// Componentes del sistema
 import UsuariosCrud from "./components/UsuariosCrud";
 import ClippedDrawer from "./components/BarraLateral";
 import MenuAppBar from "./components/AppHeader";
 import Login from "./components/Login";
+import Home from "./components/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { AppBar, Toolbar, Button } from "@mui/material";
+// Componentes MUI
+import { Box, Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
-import './App.css'
-
+// Activar el tema oscuro
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
   },
+
 });
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  /* Prueba de conexion entre el backend y frontend */
-  useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/getUsuarios")
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }, []);
+  const [isLogged, setIsLogged] = useState(false);
   return (
     <>
-
       <ThemeProvider theme={darkTheme}>
         <Router>
           <Routes>
+            {/* Default */}
+            <Route path="/" element={<Login />} />
+
+            {/* Formulario de login */}
             <Route path="/login" element={<Login />} />
 
+            {/* Selección de base de datos */}
             <Route
-              path="/usuarios"
+              path="/home"
               element={
                 <ProtectedRoute>
-                  {/* container de la App */}
                   <Box sx={{ display: 'flex' }}>
                     <CssBaseline />
-                    {/* Header */}
                     <MenuAppBar />
-                    {/* Barra lateral */}
-                    <ClippedDrawer />
-                    {/* CRUD */}
-                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                      <UsuariosCrud />
-                    </Box>
+                    <Container maxWidth="sm">
+                      <Home />
+                    </Container>
                   </Box>
-
                 </ProtectedRoute>
               }
             />
 
-            {/* Default */}
-            <Route path="/" element={<Login />} />
+            {/* Muestra la tabla de datos de la base de datos seleccionada: /base de datos/tabla */}
+            <Route
+              path="/:nombre/:nombre"
+              element={
+                <ProtectedRoute>
+                  <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <MenuAppBar />
+                    <ClippedDrawer />
+                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                      <UsuariosCrud />
+                    </Box>
+                  </Box>
+                </ProtectedRoute>
+              }
+            />
+
+            {/* No muestra nada solo la barra lateral para seleccionar tabla de la base de datos*/}
+            <Route
+              path="/:nombre"
+              element={
+                <ProtectedRoute>
+                  <Box sx={{
+                    position: 'relative',
+                    display: 'flex',
+                    overflow: 'hidden',
+                    height: '100%',
+                    width: '100%',
+                  }}>
+                    <CssBaseline />
+                    <MenuAppBar />
+                    <ClippedDrawer />
+                  </Box>
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Router>
       </ThemeProvider>
